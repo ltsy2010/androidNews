@@ -35,6 +35,8 @@ public class SearchNewsAdapter extends RecyclerView.Adapter<SearchNewsAdapter.Se
     // oncreateviewholder will be screensize.
    // Only as many view holders as needed to display the on-screen
     // portion of the dynamic content are created.
+    //create a few viewholder in the beginning, the number of viewholder depends on memory.
+    //after enough, if will go to bindviewholder directly.
     @NonNull
     @Override
     public SearchNewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,14 +48,17 @@ public class SearchNewsAdapter extends RecyclerView.Adapter<SearchNewsAdapter.Se
     //add article to each view
     //article.get: article list's index.
     //onbindviewholder will be called many times, based on your scolled times.
+    //reuse viewholder
     @Override
     public void onBindViewHolder(@NonNull SearchNewsViewHolder holder, int position) {
         Article article = articles.get(position);
         holder.favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
         holder.itemTitleTextView.setText(article.title);
 
+        //download pics and fit into imageview by resize.
+        //downloaded pics stores in memory. in a different thread to download pic, async.
+        //cache? -> LRU: linked hashmap, what if not linkedhashmap?
         Picasso.get().load(article.urlToImage).into(holder.itemImageView);
-
 
     }
 
@@ -65,13 +70,15 @@ public class SearchNewsAdapter extends RecyclerView.Adapter<SearchNewsAdapter.Se
 
 
     // 3. SearchNewsViewHolder:
-    // TODO
+    // .bind: find view by id
+    //from oncreateviewholder
     public static class SearchNewsViewHolder extends RecyclerView.ViewHolder {
 
         ImageView favoriteImageView;
         ImageView itemImageView;
         TextView itemTitleTextView;
 
+        //constructor
         public SearchNewsViewHolder(@NonNull View itemView) {
             super(itemView);
             SearchNewsItemBinding binding = SearchNewsItemBinding.bind(itemView);

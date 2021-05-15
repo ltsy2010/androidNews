@@ -55,6 +55,7 @@ public class SearchFragment extends Fragment {
         binding.newsResultsRecyclerView.setLayoutManager(gridLayoutManager);
         binding.newsResultsRecyclerView.setAdapter(newsAdapter);
 
+       //achieve search function, also a call back.
         binding.newsSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
